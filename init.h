@@ -98,7 +98,7 @@ struct BrainHandler* init(int layer_neuron_nums[], int num_layers) {
     }
 
     //print_weight();
-    printf("\n\n");
+    //printf("\n\n");
     //print_node();
     return brain;
 }
