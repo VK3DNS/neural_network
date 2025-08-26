@@ -1,0 +1,3 @@
+/Users/nathan/CLionProjects/neural/cmake-build-debug/CMakeFiles/neural.dir
+/Users/nathan/CLionProjects/neural/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/nathan/CLionProjects/neural/cmake-build-debug/CMakeFiles/rebuild_cache.dir
