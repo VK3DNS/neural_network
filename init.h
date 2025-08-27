@@ -38,6 +38,8 @@ struct BrainHandler{
     int num_layers;
     float*** weight_array;
     float** node_array;
+
+    float* output_array;
 };
 
 float sigmoid(float x) {
@@ -48,11 +50,6 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
-    if (layer_neuron_nums == NULL) {
-        fprintf(stderr, "Memory allocation failed for layer_neuron_nums\n");
-        free(brain);
-        exit(EXIT_FAILURE);
-    }
 
     layer_neuron_nums[0] = inputneurons;
     for (int i = 0; i < numhiddenlayers; i++) {
@@ -67,44 +64,32 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
         exit(EXIT_FAILURE);
     }
 
-    brain->LAYER_COUNT = layer_neuron_nums;
+    brain->LAYER_COUNT = (int*)malloc(num_layers * sizeof(int));
     brain->default_weight = default_weight;
     brain->num_layers = num_layers;
     brain->weight_array = (float***)malloc(brain->num_layers * sizeof(float**));
     brain->node_array = (float**)malloc(brain->num_layers * sizeof(float*));
+    brain->output_array = (float*)malloc(brain->num_layers * sizeof(float));
 
-    brain->weight_array = (float***)malloc(brain->num_layers * sizeof(float**));
-    if (brain->weight_array == NULL) {
-        fprintf(stderr, "Memory allocation failed for weight_array\n");
-        free(brain);
-        exit(EXIT_FAILURE);
+    for (int i = 0; i < num_layers; i++) {
+        brain->LAYER_COUNT[i] = layer_neuron_nums[i];
     }
-    brain->node_array = (float**)malloc(brain->num_layers * sizeof(float*));
-    if (brain->node_array == NULL) {
-        fprintf(stderr, "Memory allocation failed for node_array\n");
-        free(brain->weight_array);
-        free(brain);
-        exit(EXIT_FAILURE);
+
+    /*
+    for (int i = 0; i < brain->num_layers; i++) {
+        brain->output_array[i] = (float*)malloc(brain->LAYER_COUNT[i] * sizeof(float));
     }
+    */
 
     for (int layernum = 0; layernum < brain->num_layers; layernum++) {
         brain->weight_array[layernum] = (float**)malloc(layer_neuron_nums[layernum] * sizeof(float*));
-        if (brain->weight_array[layernum] == NULL) {
-            fprintf(stderr, "Memory allocation failed for weight_array[%d]\n", layernum);
-            exit(EXIT_FAILURE);
-        }
+
         brain->node_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
-        if (brain->node_array[layernum] == NULL) {
-            fprintf(stderr, "Memory allocation failed for node_array[%d]\n", layernum);
-            exit(EXIT_FAILURE);
-        }
+
         for (int layerneuron = 0; layerneuron < layer_neuron_nums[layernum]; layerneuron++) {
             if (layernum < brain->num_layers - 1) {
                 brain->weight_array[layernum][layerneuron] = (float*)malloc(layer_neuron_nums[layernum+1] * sizeof(float));
-                if (brain->weight_array[layernum][layerneuron] == NULL) {
-                    fprintf(stderr, "Memory allocation failed for weight_array[%d][%d]\n", layernum, layerneuron);
-                    exit(EXIT_FAILURE);
-                }
+
                 for (int nextlayerweight = 0; nextlayerweight < layer_neuron_nums[layernum+1]; nextlayerweight++) {
                     brain->weight_array[layernum][layerneuron][nextlayerweight] = default_weight;
                 }
@@ -122,18 +107,25 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
 }
 
 void free_brain(struct BrainHandler* brain) {
-    for (int l = 0; l < brain->num_layers; l++) {
-        for (int n = 0; n < brain->LAYER_COUNT[l]; n++) {
-            if (brain->weight_array[l][n] != NULL) {
-                free(brain->weight_array[l][n]);
+
+    if (brain) {
+        for (int l = 0; l < brain->num_layers; l++) {
+            for (int n = 0; n < brain->LAYER_COUNT[l]; n++) {
+                if (brain->weight_array[l][n] != NULL) {
+                    free(brain->weight_array[l][n]);
+                }
             }
+            free(brain->weight_array[l]);
+            free(brain->node_array[l]);
         }
-        free(brain->weight_array[l]);
-        free(brain->node_array[l]);
+
+        free(brain->output_array);
+        free(brain->LAYER_COUNT);
+
+        free(brain->weight_array);
+        free(brain->node_array);
+        free(brain);
     }
-    free(brain->weight_array);
-    free(brain->node_array);
-    free(brain);
 }
 
 #endif INITNETWORK_H

@@ -41,6 +41,12 @@ void updatelayer(int layernum, struct BrainHandler *brain) {
         }
         brain->node_array[layernum][nextlayerneuron] = sigmoid(sum);
     }
+
+    if (layernum == brain->num_layers - 1) {
+        for (int i = 0; i < outputneurons; i++) {
+            brain->output_array[i] = brain->node_array[layernum][i];
+        }
+    }
 }
 
 void updatebrain(struct BrainHandler *brain) {

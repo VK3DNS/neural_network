@@ -1,8 +1,12 @@
+//
+// Created by Pepper Scott on 26/8/2025.
+//
+
 #ifndef defaults
 #define defaults
 const float default_weight = 0.5f;
 const int inputneurons = 2;
-const int outputneurons = 1;
+const int outputneurons = 7;
 const int numtestcases = 2;
 #endif
 
@@ -21,6 +25,7 @@ int testout[numtestcases][outputneurons] = {
 #include "imports.h"
 
 int main(void) {
+    int testing = 1;
 
     int hidden_layer_neurons[] = {10,4,4};
     int num_hidden_layers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
@@ -34,6 +39,11 @@ int main(void) {
     //print_weight(brain);
     print_node(brain);
 
+    for (int i = 0; i < outputneurons; i++) {
+        printf("Output Neuron %d: %f\n", i, brain->output_array[i]);
+    }
+
+    printf("yes\n\n");
     free_brain(brain);
     return 0;
 }
