@@ -75,12 +75,6 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
         brain->LAYER_COUNT[i] = layer_neuron_nums[i];
     }
 
-    /*
-    for (int i = 0; i < brain->num_layers; i++) {
-        brain->output_array[i] = (float*)malloc(brain->LAYER_COUNT[i] * sizeof(float));
-    }
-    */
-
     for (int layernum = 0; layernum < brain->num_layers; layernum++) {
         brain->weight_array[layernum] = (float**)malloc(layer_neuron_nums[layernum] * sizeof(float*));
 

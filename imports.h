@@ -25,5 +25,7 @@
 #include "init.h"
 #include "printer.h"
 #include "update.h"
+#include "cost.h"
+#include "gradient.h"
 
 #endif
