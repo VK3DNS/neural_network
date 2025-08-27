@@ -7,4 +7,6 @@ add_executable(neural main.c
         init.h
         printer.h
         update.h
-        imports.h)
+        imports.h
+        cost.h
+        gradient.h)

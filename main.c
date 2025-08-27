@@ -25,7 +25,7 @@ int main(void) {
     int hidden_layer_neurons[] = {10,4,4};
     int num_hidden_layers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
-    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, num_hidden_layers);
+    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, num_hidden_layers, 0);
     const float inputs[] = {0.0f, 0.0f};
 
     setfirstlayer(inputs, brain);

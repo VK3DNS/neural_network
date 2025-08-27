@@ -29,6 +29,9 @@ const float default_weight = 0.5f;
 #define INITNETWORK_H
 
 struct BrainHandler{
+    int testq;
+    int testnum;
+
     int* LAYER_COUNT;
     float default_weight;
 
@@ -41,7 +44,7 @@ float sigmoid(float x) {
     return 1 / (1 + exp(-x));
 }
 
-struct BrainHandler* init(int inputneurons, int hidden_layer_neurons[], int outputneurons, int numhiddenlayers) {
+struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, int testq) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
