@@ -22,10 +22,16 @@
 #include <math.h>
 #endif
 
+#ifndef string_h
+#define string_h
+#include <string.h>
+#endif
+
 #include "init.h"
 #include "printer.h"
 #include "update.h"
 #include "cost.h"
-#include "gradient.h"
+#include "weight_bias_delta.h"
+#include "matrix_functions.h"
 
 #endif

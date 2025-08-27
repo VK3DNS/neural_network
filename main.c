@@ -40,6 +40,30 @@ int main(void) {
     print_node(brain);
 
     /*
+    const int row = 2;
+    const int col = 3;
+
+    int matrix[row][col] = {
+        {1,2,3},
+        {4,5,6}
+    };
+
+    int elemsize = sizeof(int);
+
+    int* out = transpose(matrix, row, col, elemsize);
+
+    int (*matrix2d)[row] = (int (*)[row])out;
+
+    for (int i = 0; i < col; i++) {
+        for (int j = 0; j < row; j++) {
+            printf("%d ", matrix2d[i][j]);
+        }
+        printf("\n");
+    }
+
+    */
+
+    /*
     for (int i = 0; i < outputneurons; i++) {
         printf("Output Neuron %d: %f\n", i, brain->output_array[i]);
     }
@@ -47,7 +71,6 @@ int main(void) {
 
     calculate_cost(brain, testout[0], outputneurons);
 
-    printf("yes\n\n");
     free_brain(brain);
     return 0;
 }

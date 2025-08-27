@@ -39,11 +39,18 @@ struct BrainHandler{
     float*** weight_array;
     float** node_array;
 
+    float** bias_array;
+    float** delta_array;
+
     float* output_array;
 };
 
 float sigmoid(float x) {
     return 1 / (1 + exp(-x));
+}
+
+float sigmoid_derivative(float x) {
+    return x * (1 - x);
 }
 
 struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, int testq) {
@@ -69,6 +76,10 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     brain->num_layers = num_layers;
     brain->weight_array = (float***)malloc(brain->num_layers * sizeof(float**));
     brain->node_array = (float**)malloc(brain->num_layers * sizeof(float*));
+
+    brain->bias_array = (float**)malloc(brain->num_layers * sizeof(float*));
+    brain->delta_array = (float**)malloc(brain->num_layers * sizeof(float*));
+
     brain->output_array = (float*)malloc(brain->num_layers * sizeof(float));
 
     for (int i = 0; i < num_layers; i++) {
@@ -79,6 +90,12 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
         brain->weight_array[layernum] = (float**)malloc(layer_neuron_nums[layernum] * sizeof(float*));
 
         brain->node_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
+
+        brain->bias_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
+        brain->delta_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
+
+        *brain->bias_array[layernum] = 0.0f;
+        *brain->delta_array[layernum] = 0.0f;
 
         for (int layerneuron = 0; layerneuron < layer_neuron_nums[layernum]; layerneuron++) {
             if (layernum < brain->num_layers - 1) {
