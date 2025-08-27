@@ -41,8 +41,23 @@ float sigmoid(float x) {
     return 1 / (1 + exp(-x));
 }
 
-struct BrainHandler* init(int layer_neuron_nums[], int num_layers) {
+struct BrainHandler* init(int inputneurons, int hidden_layer_neurons[], int outputneurons, int numhiddenlayers) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
+
+    int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
+    if (layer_neuron_nums == NULL) {
+        fprintf(stderr, "Memory allocation failed for layer_neuron_nums\n");
+        free(brain);
+        exit(EXIT_FAILURE);
+    }
+
+    layer_neuron_nums[0] = inputneurons;
+    for (int i = 0; i < numhiddenlayers; i++) {
+        layer_neuron_nums[1 + i] = hidden_layer_neurons[i];
+    }
+    layer_neuron_nums[1 + numhiddenlayers] = outputneurons;
+
+    int num_layers = 2 + numhiddenlayers;
 
     if (brain == NULL) {
         fprintf(stderr, "Memory allocation failed for brain\n");

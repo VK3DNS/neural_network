@@ -43,4 +43,10 @@ void updatelayer(int layernum, struct BrainHandler *brain) {
     }
 }
 
+void updatebrain(struct BrainHandler *brain) {
+    for (int layernum = 1; layernum < brain->num_layers; layernum++) {
+        updatelayer(layernum, brain);
+    }
+}
+
 #endif
