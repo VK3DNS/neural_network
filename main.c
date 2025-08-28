@@ -39,57 +39,7 @@ int main(void) {
     //print_weight(brain);
     print_node(brain);
 
-
-    const int row = 2;
-    const int col = 3;
-
-    int matrix[row][col] = {
-        {1,2,3},
-        {4,5,6}
-    };
-
-    int elemsize = sizeof(int);
-
-    void* out = transpose(matrix, row, col, elemsize);
-
-    int (*matrix2d)[row] = (int (*)[row])out;
-
-    for (int i = 0; i < col; i++) {
-        for (int j = 0; j < row; j++) {
-            printf("%d ", matrix2d[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
-    void* out2 = scalar_multiply_int(matrix2d, col, row, 2);
-    void* out3 = scalar_multiply_float(matrix2d, col, row, 2);
-    int (*matrix2d2)[row] = (int (*)[row])out2;
-    float (*matrix2d3)[row] = (float (*)[row])out3;
-
-    for (int i = 0; i < col; i++) {
-        for (int j = 0; j < row; j++) {
-            printf("%d ", matrix2d2[i][j]);
-        }
-        printf("\n");
-    }
-
-    for (int i = 0; i < col; i++) {
-        for (int j = 0; j < row; j++) {
-            printf("%f ", matrix2d3[i][j]);
-        }
-        printf("\n");
-    }
-
-
-
-    /*
-    for (int i = 0; i < outputneurons; i++) {
-        printf("Output Neuron %d: %f\n", i, brain->output_array[i]);
-    }
-    */
-
-    calculate_cost(brain, testout[0], outputneurons);
+    //calculate_cost(brain, testout[0], outputneurons);
 
     free_brain(brain);
     return 0;
