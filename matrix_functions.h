@@ -5,33 +5,19 @@
 #ifndef MATRIX_FUNCTIONS_H
 #define MATRIX_FUNCTIONS_H
 
-void* transpose(const void* inmatrix, int rowcount, int columncount, int elemsize) {
-    void* outmatrix = calloc(rowcount * columncount, elemsize);
-    if (!outmatrix) return NULL;
+float* transpose(const float* inmatrix, int rowcount, int columncount) {
+    float* out = (float*)malloc(sizeof(float) * rowcount * columncount);
 
-    for (int i = 0; i < rowcount; i++) {
-        for (int j = 0; j < columncount; j++) {
-            const void* source = (const char*)inmatrix + (i * columncount + j) * elemsize;
-            void* dest = (char*)outmatrix + (j * rowcount + i) * elemsize;
-            memcpy(dest, source, elemsize);
+    for (int row = 0; row < rowcount; row++) {
+        for (int col = 0; col < columncount; col++) {
+            out[col * rowcount + row] = inmatrix[row * columncount + col];
         }
     }
-    return outmatrix;
+
+    return out;
 }
 
-void* scalar_multiply_int(void* matrix, int rowcount, int columncount, float scalar) {
-    void* outmatrix = calloc(rowcount * columncount, sizeof(int));
-    for (int i = 0; i < rowcount; i++) {
-        for (int j = 0; j < columncount; j++) {
-            void* source = (char*)matrix + (i * columncount + j) * sizeof(int);
-            void* dest = (char*)outmatrix + (i * columncount + j) * sizeof(int);
-            *(int*)dest = (*(int*)source) * scalar;
-        }
-    }
-    return outmatrix;
-}
-
-void* scalar_multiply_float(void* matrix, int rowcount, int columncount, float scalar) {
+void* scalar_multiply(void* matrix, int rowcount, int columncount, float scalar) {
     void* outmatrix = calloc(rowcount * columncount, sizeof(float));
     for (int i = 0; i < rowcount; i++) {
         for (int j = 0; j < columncount; j++) {
@@ -43,20 +29,7 @@ void* scalar_multiply_float(void* matrix, int rowcount, int columncount, float s
     return outmatrix;
 }
 
-void* hadamard_multiply_int(int* in1, int* in2, int rowcount, int columncount) {
-    void* outmatrix = calloc(rowcount * columncount, sizeof(int));
-    for (int i = 0; i < rowcount; i++) {
-        for (int j = 0; j < columncount; j++) {
-            void* source1 = (char*)in1 + (i * columncount + j) * sizeof(int);
-            void* source2 = (char*)in2 + (i * columncount + j) * sizeof(int);
-            void* dest = (char*)outmatrix + (i * columncount + j) * sizeof(int);
-            *(int*)dest = (*(int*)source1) * (*(int*)source2);
-        }
-    }
-    return outmatrix;
-}
-
-void* hadamard_multiply_float(float* in1, float* in2, int rowcount, int columncount) {
+void* hadamard_multiply(float* in1, float* in2, int rowcount, int columncount) {
     void* outmatrix = calloc(rowcount * columncount, sizeof(float));
     for (int i = 0; i < rowcount; i++) {
         for (int j = 0; j < columncount; j++) {
@@ -69,21 +42,7 @@ void* hadamard_multiply_float(float* in1, float* in2, int rowcount, int columnco
     return outmatrix;
 }
 
-void* matrix_multiply_int(int* in1, int* in2, int row, int common, int col) {
-    int* outmatrix = calloc(row * col, sizeof(int));
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            int sum = 0;
-            for (int k = 0; k < common; k++) {
-                sum += in1[i * common + k] * in2[k * col + j];
-            }
-            outmatrix[i * col + j] = sum;
-        }
-    }
-    return outmatrix;
-}
-
-void* matrix_multiply_float(float* in1, float* in2, int row, int common, int col) {
+void* matrix_multiply(float* in1, float* in2, int row, int common, int col) {
     float* outmatrix = calloc(row * col, sizeof(float));
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
