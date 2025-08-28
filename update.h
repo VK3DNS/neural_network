@@ -35,15 +35,17 @@ void updatelayer(int layernum, struct BrainHandler *brain) {
     }
 
     for (int nextlayerneuron = 0; nextlayerneuron < brain->LAYER_COUNT[layernum]; nextlayerneuron++) {
-        float sum = 0.0f;
+        float sum = brain->bias_array[layernum][nextlayerneuron];
         for (int oldlayerneuron = 0; oldlayerneuron < brain->LAYER_COUNT[layernum-1]; oldlayerneuron++) {
             sum += brain->node_array[layernum-1][oldlayerneuron] * brain->weight_array[layernum-1][oldlayerneuron][nextlayerneuron];
         }
+        brain->z_array[layernum][nextlayerneuron] = sum;
         brain->node_array[layernum][nextlayerneuron] = sigmoid(sum);
+        brain->activation_derivative_array[layernum][nextlayerneuron] = sigmoid_derivative(sum);
     }
 
     if (layernum == brain->num_layers - 1) {
-        for (int i = 0; i < outputneurons; i++) {
+        for (int i = 0; i < brain->outputneurons; i++) {
             brain->output_array[i] = brain->node_array[layernum][i];
         }
     }

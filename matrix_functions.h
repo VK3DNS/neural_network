@@ -69,6 +69,34 @@ void* hadamard_multiply_float(float* in1, float* in2, int rowcount, int columnco
     return outmatrix;
 }
 
+void* matrix_multiply_int(int* in1, int* in2, int row, int common, int col) {
+    int* outmatrix = calloc(row * col, sizeof(int));
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            int sum = 0;
+            for (int k = 0; k < common; k++) {
+                sum += in1[i * common + k] * in2[k * col + j];
+            }
+            outmatrix[i * col + j] = sum;
+        }
+    }
+    return outmatrix;
+}
+
+void* matrix_multiply_float(float* in1, float* in2, int row, int common, int col) {
+    float* outmatrix = calloc(row * col, sizeof(float));
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            float sum = 0;
+            for (int k = 0; k < common; k++) {
+                sum += in1[i * common + k] * in2[k * col + j];
+            }
+            outmatrix[i * col + j] = sum;
+        }
+    }
+    return outmatrix;
+}
+
 #endif
 
 /*
