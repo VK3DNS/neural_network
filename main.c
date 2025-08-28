@@ -49,23 +49,68 @@ int main(void) {
         {0.9f}
     };
 
-    const int row = 3;
-    const int col = 1;
 
-    float* out = matrix_multiply_float(current_activation_derivative, nablacost, 3, 2, 1);
+    const int row = 2;
+    const int col = 3;
 
-    float (*matrix2d3)[row] = (float (*)[row])out;
+    float** totranspose = brain->weight_array[0];
 
-    for (int i = 0; i < 3; i++) {
-        printf("%f\n", out[i]);
+    float send[row * col];
+
+    /*
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            send[i * col + j] = totranspose[i][j];
+            printf("%f", totranspose[i][j]);
+        }
+        printf("\n");
     }
+    */
+
+    //printf("row = %d, col = %d\n", brain->LAYER_COUNT[0], brain->LAYER_COUNT[1]);
+
+    //float* out = transpose(send, brain->LAYER_COUNT[0], brain->LAYER_COUNT[1]);
+
+    //float (*matrix2d)[row] = (float (*)[row])out;
+
+    /*
+    for (int i = 0; i < col; i++) {
+        for (int j = 0; j < row; j++) {
+            printf("%f\t", matrix2d[i][j]);
+        }
+        printf("\n");
+    }
+    */
+
 
     //print_weight(brain);
-    print_node(brain);
+    //print_node(brain);
 
-    calculate_cost(brain, testout[0]);
+    //calculate_cost(brain, testout[0]);
 
-    printf("\n\n");
+    //printf("\n\n");
+
+    /*
+    float multiply1[3][2] = {
+        {0.5f, 0.6f},
+        {0.7f, 0.8f},
+        {0.9f, 1.0f}
+    };
+
+    float multiply2[2][1] = {
+        {0.3f},
+        {0.9f}
+    };
+
+    float (*mutiplyout)[col] = matrix_multiply(multiply1, multiply2, 3, 2, 1);
+
+    for (int i = 0; i < 1; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf("%f\t", mutiplyout[i][j]);
+        }
+        printf("\n");
+    }
+    */
 
     gradient(brain, testout[0]);
 
