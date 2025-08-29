@@ -10,4 +10,5 @@ add_executable(neural main.c
         imports.h
         cost.h
         weight_bias_delta.h
-        matrix_functions.h)
+        matrix_functions.h
+        process.h)

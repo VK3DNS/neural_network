@@ -33,5 +33,6 @@
 #include "cost.h"
 #include "weight_bias_delta.h"
 #include "matrix_functions.h"
+#include "process.h"
 
 #endif

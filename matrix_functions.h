@@ -29,18 +29,18 @@ void* scalar_multiply(void* matrix, int rowcount, int columncount, float scalar)
     return outmatrix;
 }
 
-void* hadamard_multiply(float* in1, float* in2, int rowcount, int columncount) {
-    void* outmatrix = calloc(rowcount * columncount, sizeof(float));
-    for (int i = 0; i < rowcount; i++) {
-        for (int j = 0; j < columncount; j++) {
-            void* source1 = (char*)in1 + (i * columncount + j) * sizeof(float);
-            void* source2 = (char*)in2 + (i * columncount + j) * sizeof(float);
-            void* dest = (char*)outmatrix + (i * columncount + j) * sizeof(float);
-            *(float*)dest = (*(float*)source1) * (*(float*)source2);
-        }
+float* hadamard_multiply(float* in1, float* in2, int rowcount, int columncount) {
+    int size = rowcount * columncount;
+    float* outmatrix = calloc(size, sizeof(float));
+    if (!outmatrix) return NULL;
+
+    for (int i = 0; i < size; i++) {
+        outmatrix[i] = in1[i] * in2[i];
     }
+
     return outmatrix;
 }
+
 
 void* matrix_multiply(float* in1, float* in2, int row, int common, int col) {
     float* outmatrix = calloc(row * col, sizeof(float));
