@@ -8,6 +8,7 @@ const float default_weight = 0.5f;
 const int inputneurons = 2;
 const int outputneurons = 1;
 const int numtestcases = 4;
+const float learningrate = 0.1f;
 #endif
 
 #ifndef testcases
@@ -29,10 +30,10 @@ float testout[numtestcases][outputneurons] = {
 #include "imports.h"
 
 int main(void) {
-    int hidden_layer_neurons[] = {3,2,3};
+    int hidden_layer_neurons[] = {3,3,3};
     int numhiddenlayers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
-    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, 0);
+    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, learningrate);
 
     for (int testcase = 0; testcase <=0; testcase++) {
         printf("Testcase %d:\n", testcase);

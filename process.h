@@ -5,7 +5,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-void* process(struct BrainHandler *brain, float* inputs, int inputlength, const float* test) {
+void process(struct BrainHandler *brain, float* inputs, int inputlength, const float* test) {
     int testq = test!=NULL;
     printf("testing? %d\n", testq);
     //printf
@@ -17,6 +17,7 @@ void* process(struct BrainHandler *brain, float* inputs, int inputlength, const 
 
     if (testq) {
         gradient(brain, test);
+        updatebrain(brain);
     }
 }
 #endif

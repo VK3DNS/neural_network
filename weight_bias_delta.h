@@ -59,4 +59,23 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
     free(nablacost);
 }
 
+void change_weights_and_biases(struct BrainHandler *brain, float learning_rate) {
+    for (int layer = 0; layer < brain->num_layers - 1; layer++) {
+        const int row = brain->LAYER_COUNT[layer];     // neurons in current layer
+        const int col = brain->LAYER_COUNT[layer + 1]; // neurons in next layer
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                float delta_weight = -brain->learningrate * brain->node_array[layer][i] * brain->error_array[layer+1][j];
+                brain->weight_array[layer][i][j] += delta_weight;
+            }
+        }
+
+        for (int j = 0; j < col; j++) {
+            float delta_bias = -brain->learningrate * brain->error_array[layer+1][j];
+            brain->bias_array[layer+1][j] += delta_bias;
+        }
+    }
+}
+
 #endif

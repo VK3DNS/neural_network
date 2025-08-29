@@ -48,6 +48,8 @@ struct BrainHandler{
 
     int inputneurons;
     int outputneurons;
+
+    float learningrate;
 };
 
 float sigmoid(float x) {
@@ -58,7 +60,7 @@ float sigmoid_derivative(float x) {
     return exp(-x)/pow(1 + exp(-x), 2);
 }
 
-struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, int testq) {
+struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, float learningrate) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
@@ -88,6 +90,8 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     brain->activation_derivative_array = (float**)malloc(brain->num_layers * sizeof(float*));
 
     brain->output_array = (float*)malloc(outputneurons * sizeof(float));
+
+    brain->learningrate = learningrate;
 
     brain->inputneurons = inputneurons;
     brain->outputneurons = outputneurons;
