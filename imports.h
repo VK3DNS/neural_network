@@ -27,6 +27,11 @@
 #include <string.h>
 #endif
 
+#ifndef srand_h
+#define srand_h
+#include <time.h>
+#endif
+
 #include "init.h"
 #include "printer.h"
 #include "update.h"

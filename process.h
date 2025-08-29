@@ -7,17 +7,19 @@
 
 void process(struct BrainHandler *brain, float* inputs, int inputlength, const float* test) {
     int testq = test!=NULL;
-    printf("testing? %d\n", testq);
-    //printf
 
     setfirstlayer(inputs, brain);
     updatebrain(brain);
 
-    printf("\n");
-
     if (testq) {
         gradient(brain, test);
-        updatebrain(brain);
+        change_weights_and_biases(brain);
+    } else {
+        printf("Output: ");
+        for (int i = 0; i < brain->outputneurons; i++) {
+            printf("%f ", brain->output_array[i]);
+        }
+        printf("\n");
     }
 }
 #endif

@@ -33,7 +33,7 @@ struct BrainHandler{
     int testnum;
 
     int* LAYER_COUNT;
-    float default_weight;
+    float (*default_weight)();
 
     int num_layers;
     float*** weight_array;
@@ -60,7 +60,11 @@ float sigmoid_derivative(float x) {
     return exp(-x)/pow(1 + exp(-x), 2);
 }
 
-struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, float learningrate) {
+float randnum() {
+    return (float)rand() / (float)RAND_MAX;
+}
+
+struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, float learningrate, float (*default_weight)()) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
@@ -120,7 +124,7 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
                 brain->weight_array[layernum][layerneuron] = (float*)malloc(layer_neuron_nums[layernum+1] * sizeof(float));
 
                 for (int nextlayerweight = 0; nextlayerweight < layer_neuron_nums[layernum+1]; nextlayerweight++) {
-                    brain->weight_array[layernum][layerneuron][nextlayerweight] = default_weight;
+                    brain->weight_array[layernum][layerneuron][nextlayerweight] = default_weight();
                 }
             } else {
                 brain->weight_array[layernum][layerneuron] = NULL;
@@ -128,10 +132,6 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
             brain->node_array[layernum][layerneuron] = 0.0f;
         }
     }
-
-    //print_weight();
-    //printf("\n\n");
-    //print_node();
 
     free(layer_neuron_nums);
     return brain;

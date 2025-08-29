@@ -25,7 +25,6 @@
 void setfirstlayer(const float* inputs, struct BrainHandler *brain) {
     for (int i = 0; i < brain->LAYER_COUNT[0]; i++) {
         brain->node_array[0][i] = inputs[i];
-        printf("%f\n", inputs[i]);
     }
 }
 

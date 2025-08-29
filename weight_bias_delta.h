@@ -29,8 +29,8 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
         hadamard_multiply(current_activation_derivative, nablacost, brain->outputneurons, 1);
 
     for (int layer = brain->num_layers - 2; layer >= 0; layer--) {
-        const int row = brain->LAYER_COUNT[layer];     // neurons in current layer
-        const int col = brain->LAYER_COUNT[layer + 1]; // neurons in next layer
+        const int row = brain->LAYER_COUNT[layer];
+        const int col = brain->LAYER_COUNT[layer + 1];
 
         float send[row * col];
         for (int i = 0; i < row; i++) {
@@ -46,12 +46,6 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
         brain->error_array[layer] =
             hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
 
-        printf("error layer %d:\n", layer);
-        for (int i = 0; i < row; i++) {
-            printf("%f ", brain->error_array[layer][i]);
-        }
-        printf("\n\n");
-
         free(wT);
         free(multiplicationproduct);
     }
@@ -59,10 +53,10 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
     free(nablacost);
 }
 
-void change_weights_and_biases(struct BrainHandler *brain, float learning_rate) {
+void change_weights_and_biases(struct BrainHandler *brain) {
     for (int layer = 0; layer < brain->num_layers - 1; layer++) {
-        const int row = brain->LAYER_COUNT[layer];     // neurons in current layer
-        const int col = brain->LAYER_COUNT[layer + 1]; // neurons in next layer
+        const int row = brain->LAYER_COUNT[layer];
+        const int col = brain->LAYER_COUNT[layer + 1];
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
