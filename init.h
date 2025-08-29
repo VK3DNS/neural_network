@@ -87,7 +87,7 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     brain->error_array = (float**)malloc(brain->num_layers * sizeof(float*));
     brain->activation_derivative_array = (float**)malloc(brain->num_layers * sizeof(float*));
 
-    brain->output_array = (float*)malloc(brain->num_layers * sizeof(float));
+    brain->output_array = (float*)malloc(outputneurons * sizeof(float));
 
     brain->inputneurons = inputneurons;
     brain->outputneurons = outputneurons;
@@ -106,8 +106,10 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
         brain->error_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
         brain->activation_derivative_array[layernum] = (float*)malloc(layer_neuron_nums[layernum] * sizeof(float));
 
-        *brain->bias_array[layernum] = 0.0f;
-        *brain->error_array[layernum] = 0.0f;
+        for (int j = 0; j < layer_neuron_nums[layernum]; j++) {
+            brain->bias_array[layernum][j] = 0.0f;
+            brain->error_array[layernum][j] = 0.0f;
+        }
 
         for (int layerneuron = 0; layerneuron < layer_neuron_nums[layernum]; layerneuron++) {
             if (layernum < brain->num_layers - 1) {

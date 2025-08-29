@@ -12,14 +12,14 @@ const int numtestcases = 4;
 
 #ifndef testcases
 #define testcases
-int testin[numtestcases][inputneurons] = {
-    {0,2},
+float testin[numtestcases][inputneurons] = {
+    {1,1},
     {1,3},
     {1,4},
     {0,5}
 };
-int testout[numtestcases][outputneurons] = {
-    {1},
+float testout[numtestcases][outputneurons] = {
+    {0},
     {1},
     {0},
     {0}
@@ -29,12 +29,12 @@ int testout[numtestcases][outputneurons] = {
 #include "imports.h"
 
 int main(void) {
-    int hidden_layer_neurons[] = {3,3,3};
+    int hidden_layer_neurons[] = {3,2,3};
     int numhiddenlayers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
     struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, 0);
 
-    for (int testcase = 0; testcase < numtestcases; testcase++) {
+    for (int testcase = 0; testcase <=0; testcase++) {
         printf("Testcase %d:\n", testcase);
         const int inputlength = sizeof(testin[testcase])/sizeof(testin[testcase][0]);
         process(brain, testin[testcase], inputlength, testout[testcase]);

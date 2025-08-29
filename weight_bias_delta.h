@@ -17,102 +17,43 @@ void reset_weight_bias_delta(struct BrainHandler *brain) {
     }
 }
 
-void update_weight_delta(struct BrainHandler *brain) {
-
-}
-
-void backpropagate(struct BrainHandler *brain) {
-}
-
 void gradient(struct BrainHandler *brain, const float* expected_output) {
-    float* nablacost = calloc(brain->outputneurons, sizeof(float));
 
+    float* nablacost = calloc(brain->outputneurons, sizeof(float));
     for (int i = 0; i < brain->outputneurons; i++) {
         nablacost[i] = cost_derivative(brain, brain->output_array[i], expected_output[i]);
     }
 
-    for (int neuron = 0; neuron < brain->outputneurons; neuron++) {
-        //printf("nablacost %d: %f\n", neuron, nablacost[neuron]);
-    }
-
-    //iterate first backpropogate also define my current layer matrix for later
     float* current_activation_derivative = brain->activation_derivative_array[brain->num_layers-1];
-    brain->error_array[brain->num_layers-1] = hadamard_multiply(current_activation_derivative, nablacost, brain->outputneurons, 1);
+    brain->error_array[brain->num_layers-1] =
+        hadamard_multiply(current_activation_derivative, nablacost, brain->outputneurons, 1);
 
-    //printf("error: %f\n", brain->error_array[brain->num_layers-1][0]);
+    for (int layer = brain->num_layers - 2; layer >= 0; layer--) {
+        const int row = brain->LAYER_COUNT[layer];     // neurons in current layer
+        const int col = brain->LAYER_COUNT[layer + 1]; // neurons in next layer
 
-    for (int neuron = 0; neuron < brain->LAYER_COUNT[brain->num_layers-2]; neuron++) {
-        //printf("sigmoid derivate layer L-2 at neuron %d: %f\n", neuron, brain->activation_derivative_array[brain->num_layers-2][neuron]);
-    }
-
-    for (int neuron = 0; neuron < brain->LAYER_COUNT[brain->num_layers-2]; neuron++) {
-        //printf("neuron %d: %f\n", neuron, brain->error_array[brain->num_layers-2][neuron]);
-    }
-
-    float* weightstransposedraw;
-
-    //printf("numlayers: %d\n", brain->num_layers);
-
-    for (int layer = brain->num_layers-2; layer >= 0; layer--) {
-        printf("current layer num: %d\nwidth of last layer: %d, width of current layer: %d\n", layer, brain->LAYER_COUNT[layer], brain->LAYER_COUNT[layer+1]);
-        const int row = brain->LAYER_COUNT[layer];
-        const int col = brain->LAYER_COUNT[layer+1];
-
-        float** totranspose = brain->weight_array[layer];
         float send[row * col];
-        float pretranspose[row][col];
-
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                send[i * col + j] = totranspose[i][j];
-                pretranspose[i][j] = totranspose[i][j];
+                send[i * col + j] = brain->weight_array[layer][i][j];
             }
         }
 
-        printf("(pretranspose) row = %d, col = %d\n", row, col);
+        float* wT = transpose(send, row, col);
 
-        float* out = transpose(send, row, col);
+        float* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], row, col, 1);
 
-        float (*weightstransposed)[row] = (float (*)[row])out;
+        brain->error_array[layer] =
+            hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
 
-        for (int i = 0; i < col; i++) {
-            for (int j = 0; j < row; j++) {
-                //printf("%f\t", weightstransposed[i][j]);
-            }
-            //printf("\n");
-        }
-
-        float errorarraycopy[row][1];
-
-        printf("errorarraycopy\n");
-        for (int i = 0; i < col; i++) {
-            errorarraycopy[i][0] = brain->error_array[layer+1][i];
-            printf("%f\t", brain->error_array[layer+1][i]);
-        }
-        //printf("\n\n");
-
-        //float (*multiplicationproduct)[1] = matrix_multiply(pretranspose, errorarraycopy, brain->LAYER_COUNT[layer], brain->LAYER_COUNT[layer+1], 1);
-        float (*multiplicationproduct)[1] = matrix_multiply(weightstransposed, errorarraycopy, brain->LAYER_COUNT[layer], brain->LAYER_COUNT[layer+1], 1);
-
-        //printf("multiplicationproduct\n");
-        for (int j = 0; j < row; j++) {
-            for (int i = 0; i < 1; i++) {
-                //printf("%f\t", multiplicationproduct[i][j]);
-            }
-            //printf("\n");
-        }
-
-        brain->error_array[layer] = hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
-
-        //printf("hadamard_multiply\n");
+        printf("error layer %d:\n", layer);
         for (int i = 0; i < row; i++) {
-            //printf("%f\t", brain->error_array[layer][i]);
+            printf("%f ", brain->error_array[layer][i]);
         }
+        printf("\n\n");
 
-        for (int neuron = 0; neuron < brain->LAYER_COUNT[layer-1]; neuron++) {
-            //printf("layer %d error at neuron %d: %f\n", i-1, neuron, brain->error_array[i-1][neuron]);
-        }
-        printf("\n");
+        free(wT);
+        free(multiplicationproduct);
     }
 
     free(nablacost);

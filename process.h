@@ -13,6 +13,8 @@ void* process(struct BrainHandler *brain, float* inputs, int inputlength, const 
     setfirstlayer(inputs, brain);
     updatebrain(brain);
 
+    printf("\n");
+
     if (testq) {
         gradient(brain, test);
     }
