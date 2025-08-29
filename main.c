@@ -43,9 +43,11 @@ float (*default_weight) = randnum;
         process(brain, testin[testnum], inputlength, testout[testnum]);
     }
 
+    /*
     print_weight(brain);
     printf("\n\n");
     print_bias(brain);
+    */
 
     while (1) {
         float inputs[inputneurons] = {0,0};
