@@ -32,6 +32,7 @@
 #include <time.h>
 #endif
 
+#include "data.h"
 #include "init.h"
 #include "printer.h"
 #include "update.h"

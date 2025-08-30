@@ -4,27 +4,11 @@
 
 #ifndef defaults
 #define defaults
-const int inputneurons = 2;
-const int outputneurons = 2;
-const int numtestcases = 4;
+const int inputneurons = 64;
+const int outputneurons = 10;
+const int numtestcases = 100;
 const float learningrate = 1.0f;
 int trainingcycles = 10000000;
-#endif
-
-#ifndef testcases
-#define testcases
-float testin[numtestcases][inputneurons] = {
-    {0,0},
-    {0,1},
-    {1,0},
-    {1,1}
-};
-float testout[numtestcases][outputneurons] = {
-    {1,0},
-    {0,1},
-    {0,1},
-    {1,0}
-};
 #endif
 
 #include "imports.h"
@@ -32,7 +16,7 @@ float testout[numtestcases][outputneurons] = {
 float (*default_weight) = randnum;
 
 [[noreturn]] int main(void) {
-    int hidden_layer_neurons[] = {3,3};
+    int hidden_layer_neurons[] = {32,32};
     int numhiddenlayers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
     struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, learningrate, default_weight);
