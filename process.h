@@ -24,7 +24,7 @@ double* read_binary_input(const int* out_length) {
         buffer[length++] = (char)c;
     }
 
-    double* arr = malloc(length * sizeof(int));
+    double* arr = malloc(length * sizeof(double));
     if (!arr) {
         perror("malloc failed");
         free(buffer);
@@ -57,10 +57,17 @@ void process(struct BrainHandler *brain, double* inputs, int inputlength, const 
         gradient(brain, test);
         change_weights_and_biases(brain);
     } else {
-        printf("Output: ");
+        double bestoutput = -1;
+        int bestoutputcount = -1;
+        //printf("Output: ");
         for (int i = 0; i < brain->outputneurons; i++) {
             printf("%f ", brain->output_array[i]);
+            if (brain->output_array[i] > bestoutput) {
+                bestoutput = brain->output_array[i];
+                bestoutputcount = i;
+            }
         }
+        printf("\npredicted: %d", bestoutputcount);
         printf("\n");
     }
 }

@@ -52,7 +52,7 @@ void gradient(struct BrainHandler *brain, const double* expected_output) {
         double* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], col, row, 1);
 
         brain->error_array[layer] =
-            hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
+            hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], col, 1);
 
         free(wT);
         free(multiplicationproduct);
