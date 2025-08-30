@@ -39,9 +39,17 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
             }
         }
 
+        /*
+        printf("Activation derivatives at layer %d:\n", layer);
+        for (int i = 0; i < brain->LAYER_COUNT[layer]; i++) {
+            printf("%f ", brain->activation_derivative_array[layer][i]);
+        }
+        printf("\n");
+        */
+
         float* wT = transpose(send, row, col);
 
-        float* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], row, col, 1);
+        float* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], col, row, 1);
 
         brain->error_array[layer] =
             hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);

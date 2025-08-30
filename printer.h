@@ -48,6 +48,15 @@ void print_bias(struct BrainHandler *brain) {
     }
 }
 
+void print_error(struct BrainHandler *brain) {
+    printf("Error Structure:\n");
+    for (int layernum = 0; layernum < brain->num_layers; layernum++) {
+        for (int layerneuron = 0; layerneuron < brain->LAYER_COUNT[layernum]; layerneuron++) {
+            printf("Layer %d Neuron %d: %f\n", layernum, layerneuron, brain->error_array[layernum][layerneuron]);
+        }
+    }
+}
+
 void print_node(struct BrainHandler *brain) {
     printf("Node Structure:\n");
     for (int layernum = 0; layernum < brain->num_layers; layernum++) {
