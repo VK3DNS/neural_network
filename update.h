@@ -22,7 +22,7 @@
 #ifndef UPDATE_H
 #define UPDATE_H
 
-void setfirstlayer(const float* inputs, struct BrainHandler *brain) {
+void setfirstlayer(const double* inputs, struct BrainHandler *brain) {
     for (int i = 0; i < brain->LAYER_COUNT[0]; i++) {
         brain->node_array[0][i] = inputs[i];
     }
@@ -35,10 +35,15 @@ void updatelayer(int layernum, struct BrainHandler *brain) {
     }
 
     for (int nextlayerneuron = 0; nextlayerneuron < brain->LAYER_COUNT[layernum]; nextlayerneuron++) {
-        float sum = brain->bias_array[layernum][nextlayerneuron];
+        double sum = brain->bias_array[layernum][nextlayerneuron];
         for (int oldlayerneuron = 0; oldlayerneuron < brain->LAYER_COUNT[layernum-1]; oldlayerneuron++) {
             sum += brain->node_array[layernum-1][oldlayerneuron] * brain->weight_array[layernum-1][oldlayerneuron][nextlayerneuron];
         }
+
+        if (isnan(sum) || isinf(sum)) {
+            printf("Bad value in forward pass at layer %d neuron %d\n", layernum, nextlayerneuron);
+        }
+
         brain->z_array[layernum][nextlayerneuron] = sum;
         brain->node_array[layernum][nextlayerneuron] = sigmoid(sum);
         brain->activation_derivative_array[layernum][nextlayerneuron] = sigmoid_derivative(sum);

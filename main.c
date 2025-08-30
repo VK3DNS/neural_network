@@ -12,27 +12,27 @@
 const int inputneurons = 2;
 const int outputneurons = 2;
 const int numtestcases = 4;
-const float learningrate = 0.01f;
-int trainingcycles = 100000;
+const double learningrate = 1;
+int trainingcycles = 10000000;
 #endif
 
 #include "imports.h"
 
-float testin[numtestcases][inputneurons] = {
-{0.0f,0.0f},
-{0.0f,1.0f},
-{1.0f,0.0f},
-{1.0f,1.0f}
+double testin[numtestcases][inputneurons] = {
+{0.0,0.0},
+{0.0,1.0},
+{1.0,0.0},
+{1.0,1.0}
 };
 
-float testout[numtestcases][outputneurons] = {
-{1.0f,0.0f},
-{0.0f,1.0f},
-{0.0f,1.0f},
-{1.0f,0.0f}
+double testout[numtestcases][outputneurons] = {
+{1.0,0.0},
+{0.0,1.0},
+{0.0,1.0},
+{1.0,0.0}
 };
 
-float (*default_weight) = randnum;
+double (*default_weight) = randnum;
 
 [[noreturn]] int main(void) {
     int hidden_layer_neurons[] = {10,10};
@@ -55,12 +55,12 @@ float (*default_weight) = randnum;
 
 
     while (1) {
-        float* inputs = malloc(inputneurons*sizeof(float));
+        double* inputs = malloc(inputneurons*sizeof(double));
 
         inputs = read_binary_input(&inputneurons);
 
         for (int i = 0; i < inputneurons; i++) {
-            printf("%f ", inputs[i]);
+            printf("%lf ", inputs[i]);
         }
         printf("\n");
         process(brain, inputs, inputneurons, NULL);

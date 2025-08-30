@@ -17,14 +17,14 @@ void reset_weight_bias_delta(struct BrainHandler *brain) {
     }
 }
 
-void gradient(struct BrainHandler *brain, const float* expected_output) {
+void gradient(struct BrainHandler *brain, const double* expected_output) {
 
-    float* nablacost = calloc(brain->outputneurons, sizeof(float));
+    double* nablacost = calloc(brain->outputneurons, sizeof(double));
     for (int i = 0; i < brain->outputneurons; i++) {
         nablacost[i] = cost_derivative(brain, brain->output_array[i], expected_output[i]);
     }
 
-    float* current_activation_derivative = brain->activation_derivative_array[brain->num_layers-1];
+    double* current_activation_derivative = brain->activation_derivative_array[brain->num_layers-1];
     brain->error_array[brain->num_layers-1] =
         hadamard_multiply(current_activation_derivative, nablacost, brain->outputneurons, 1);
 
@@ -32,7 +32,7 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
         const int row = brain->LAYER_COUNT[layer];
         const int col = brain->LAYER_COUNT[layer + 1];
 
-        float send[row * col];
+        double send[row * col];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 send[i * col + j] = brain->weight_array[layer][i][j];
@@ -47,9 +47,9 @@ void gradient(struct BrainHandler *brain, const float* expected_output) {
         printf("\n");
         */
 
-        float* wT = transpose(send, row, col);
+        double* wT = transpose(send, row, col);
 
-        float* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], col, row, 1);
+        double* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], col, row, 1);
 
         brain->error_array[layer] =
             hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
@@ -68,13 +68,13 @@ void change_weights_and_biases(struct BrainHandler *brain) {
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                float delta_weight = -brain->learningrate * brain->node_array[layer][i] * brain->error_array[layer+1][j];
+                double delta_weight = -brain->learningrate * brain->node_array[layer][i] * brain->error_array[layer+1][j];
                 brain->weight_array[layer][i][j] += delta_weight;
             }
         }
 
         for (int j = 0; j < col; j++) {
-            float delta_bias = -brain->learningrate * brain->error_array[layer+1][j];
+            double delta_bias = -brain->learningrate * brain->error_array[layer+1][j];
             brain->bias_array[layer+1][j] += delta_bias;
         }
     }

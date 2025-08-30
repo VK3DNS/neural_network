@@ -5,11 +5,11 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-float* read_binary_input(const int* out_length) {
+double* read_binary_input(const int* out_length) {
     char* buffer = NULL;
     int capacity = 0;
     int length = 0;
-    float c;
+    double c;
 
     printf("Input: ");
     while ((c = getchar()) != '\n' && c != EOF) {
@@ -24,7 +24,7 @@ float* read_binary_input(const int* out_length) {
         buffer[length++] = (char)c;
     }
 
-    float* arr = malloc(length * sizeof(int));
+    double* arr = malloc(length * sizeof(int));
     if (!arr) {
         perror("malloc failed");
         free(buffer);
@@ -39,7 +39,7 @@ float* read_binary_input(const int* out_length) {
     return arr;
 }
 
-void process(struct BrainHandler *brain, float* inputs, int inputlength, const float* test) {
+void process(struct BrainHandler *brain, double* inputs, int inputlength, const double* test) {
     int testq = test!=NULL;
 
     setfirstlayer(inputs, brain);

@@ -8,10 +8,10 @@
 #define COST_H
 #include <math.h>
 
-float calculate_cost(struct BrainHandler *brain, const int expected_output[]) {
-    float cost = 0.0f;
+double calculate_cost(struct BrainHandler *brain, const double expected_output[]) {
+    double cost = 0.0;
     for (int i = 0; i < brain->outputneurons; i++) {
-        float error = brain->output_array[i] - expected_output[i];
+        double error = brain->output_array[i] - expected_output[i];
         cost += pow(error, 2);
     }
     cost /= 2;
@@ -19,7 +19,7 @@ float calculate_cost(struct BrainHandler *brain, const int expected_output[]) {
     return cost;
 }
 
-float cost_derivative(struct BrainHandler* brain, float output, int expected) {
+double cost_derivative(struct BrainHandler* brain, double output, int expected) {
     return (output - expected);
 }
 
