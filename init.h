@@ -49,7 +49,10 @@ struct BrainHandler{
     int inputneurons;
     int outputneurons;
 
-    double learningrate;
+    double (*learningrate_func)(struct BrainHandler*);
+
+    int epoch;
+    int total_epochs;
 };
 
 double sigmoid(double x) {
@@ -64,8 +67,12 @@ double randnum() {
     return (double)rand() / (double)RAND_MAX;
 }
 
-struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double learningrate, double (*default_weight)()) {
+struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double (*default_weight)(), int trainingcycles, double (*learningrate_func)(struct BrainHandler*)) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
+
+    brain->epoch = 0;
+    brain->total_epochs = trainingcycles;
+    brain->learningrate_func = learningrate_func;
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
 
@@ -94,8 +101,6 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     brain->activation_derivative_array = (double**)malloc(brain->num_layers * sizeof(double*));
 
     brain->output_array = (double*)malloc(outputneurons * sizeof(double));
-
-    brain->learningrate = learningrate;
 
     brain->inputneurons = inputneurons;
     brain->outputneurons = outputneurons;

@@ -39,8 +39,10 @@ double* read_binary_input(const int* out_length) {
     return arr;
 }
 
-void process(struct BrainHandler *brain, double* inputs, int inputlength, const double* test) {
+void process(struct BrainHandler *brain, double* inputs, int inputlength, const double* test, int testcase) {
     int testq = test!=NULL;
+
+    brain->epoch = testcase;
 
     setfirstlayer(inputs, brain);
     updatebrain(brain);

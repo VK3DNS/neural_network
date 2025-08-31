@@ -18,8 +18,12 @@
 #endif
 
 #ifndef math_h
+    #ifndef _USE_MATH_DEFINES
+    #define _USE_MATH_DEFINES
+    #endif
 #define math_h
 #include <math.h>
+
 #endif
 
 #ifndef string_h

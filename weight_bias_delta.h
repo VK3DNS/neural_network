@@ -19,6 +19,17 @@ void reset_weight_bias_delta(struct BrainHandler *brain) {
     }
 }
 
+double learning_rate(struct BrainHandler *brain) {
+    /*
+    double rate = ((double)1+cos((double)M_PI*(double)brain->epoch/(double)brain->total_epochs))/2;
+    if (brain->epoch % 100000 == 0) {
+        //printf("Learning rate: %lf\n", (double)rate);
+    }
+    return rate;
+    */
+    return 0.5;
+}
+
 void gradient(struct BrainHandler *brain, const double* expected_output) {
 
     double* nablacost = calloc(brain->outputneurons, sizeof(double));
@@ -27,6 +38,7 @@ void gradient(struct BrainHandler *brain, const double* expected_output) {
     }
 
     double* current_activation_derivative = brain->activation_derivative_array[brain->num_layers-1];
+    free(brain->error_array[brain->num_layers-1]);
     brain->error_array[brain->num_layers-1] =
         hadamard_multiply(current_activation_derivative, nablacost, brain->outputneurons, 1);
 
@@ -56,6 +68,7 @@ void gradient(struct BrainHandler *brain, const double* expected_output) {
 
         double* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], row, col, 1);
 
+        free(brain->error_array[layer]);
         brain->error_array[layer] =
             hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
 
@@ -74,13 +87,13 @@ void change_weights_and_biases(struct BrainHandler *brain) {
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                double delta_weight = -brain->learningrate * brain->node_array[layer][i] * brain->error_array[layer+1][j];
+                double delta_weight = -brain->learningrate_func(brain) * brain->node_array[layer][i] * brain->error_array[layer+1][j];
                 brain->weight_array[layer][i][j] += delta_weight;
             }
         }
 
         for (int j = 0; j < col; j++) {
-            double delta_bias = -brain->learningrate * brain->error_array[layer+1][j];
+            double delta_bias = -brain->learningrate_func(brain) * brain->error_array[layer+1][j];
             brain->bias_array[layer+1][j] += delta_bias;
         }
     }
