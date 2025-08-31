@@ -16,12 +16,12 @@ const double learningrate = 1;
 #else
 const int inputneurons = 64;
 const int outputneurons = 10;
-const int numtestcases = 100;
+const int numtestcases = 183;
 const double learningrate = 1;
 #endif
 
 
-int trainingcycles = 1000000;
+int trainingcycles = 10000000;
 
 #endif
 
@@ -46,7 +46,7 @@ double testout[numtestcases][outputneurons] = {
 double (*default_weight)() = randnum;
 
 [[noreturn]] int main(void) {
-    int hidden_layer_neurons[] = {10,10};
+    int hidden_layer_neurons[] = {16,16};
     int numhiddenlayers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
     struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, learningrate, default_weight);
@@ -57,13 +57,13 @@ double (*default_weight)() = randnum;
         process(brain, testin[testnum], inputlength, testout[testnum]);
     }
 
-    /*
+
     print_weight(brain);
     printf("\n\n");
     print_bias(brain);
-    printf("\n\n");
-    print_error(brain);
-    */
+    //printf("\n\n");
+    //print_error(brain);
+
 
     while (1) {
         double* inputs = malloc(inputneurons*sizeof(double));

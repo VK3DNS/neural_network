@@ -8,6 +8,8 @@
 #define WEIGHT_BIAS_DELTA_H
 #include "matrix_functions.h"
 
+//#include <assert.h>
+
 void reset_weight_bias_delta(struct BrainHandler *brain) {
     for (int layernum = 0; layernum < brain->num_layers; layernum++) {
         for (int layerneuron = 0; layerneuron < brain->LAYER_COUNT[layernum]; layerneuron++) {
@@ -32,7 +34,7 @@ void gradient(struct BrainHandler *brain, const double* expected_output) {
         const int row = brain->LAYER_COUNT[layer];
         const int col = brain->LAYER_COUNT[layer + 1];
 
-        double send[row * col];
+        double* send = malloc(row * col * sizeof(double));
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 send[i * col + j] = brain->weight_array[layer][i][j];
@@ -49,11 +51,15 @@ void gradient(struct BrainHandler *brain, const double* expected_output) {
 
         double* wT = transpose(send, row, col);
 
-        double* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], col, row, 1);
+        //assert(brain->LAYER_COUNT[layer] == row);
+        //assert(brain->LAYER_COUNT[layer+1] == col);
+
+        double* multiplicationproduct = matrix_multiply(wT, brain->error_array[layer+1], row, col, 1);
 
         brain->error_array[layer] =
-            hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], col, 1);
+            hadamard_multiply(multiplicationproduct, brain->activation_derivative_array[layer], row, 1);
 
+        free(send);
         free(wT);
         free(multiplicationproduct);
     }
