@@ -33,7 +33,10 @@ struct BrainHandler{
     int testnum;
 
     int* LAYER_COUNT;
-    double (*default_weight)();
+    double (*defaultweight_func)();
+
+    double (*activation)(double x);
+    double (*activation_derivative)(double x);
 
     int num_layers;
     double*** weight_array;
@@ -55,24 +58,29 @@ struct BrainHandler{
     int total_epochs;
 };
 
-double sigmoid(double x) {
+double activation(double x) {
     return 1 / (1 + exp(-x));
+    return (tanh(x)+1)/2;
 }
 
-double sigmoid_derivative(double x) {
+double activationderivative(double x) {
     return exp(-x)/pow(1 + exp(-x), 2);
+    return (1/pow(cosh(x),2))/2;
 }
 
 double randnum() {
     return (double)rand() / (double)RAND_MAX;
 }
 
-struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double (*default_weight)(), int trainingcycles, double (*learningrate_func)(struct BrainHandler*)) {
+struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double (*default_weight)(), int trainingcycles, double (*learningrate_func)(struct BrainHandler*), double (*activaition)(double x), double (*activation_derivative)(double x)) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
 
     brain->epoch = 0;
     brain->total_epochs = trainingcycles;
     brain->learningrate_func = learningrate_func;
+
+    brain->activation = activaition;
+    brain->activation_derivative = activation_derivative;
 
     int* layer_neuron_nums = malloc((2 + numhiddenlayers) * sizeof(int));
 
@@ -90,7 +98,7 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     }
 
     brain->LAYER_COUNT = (int*)malloc(num_layers * sizeof(int));
-    brain->default_weight = default_weight;
+    brain->defaultweight_func = default_weight;
     brain->num_layers = num_layers;
     brain->weight_array = (double***)malloc(brain->num_layers * sizeof(double**));
     brain->node_array = (double**)malloc(brain->num_layers * sizeof(double*));

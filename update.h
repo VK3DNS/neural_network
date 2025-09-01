@@ -45,8 +45,8 @@ void updatelayer(int layernum, struct BrainHandler *brain) {
         }
 
         brain->z_array[layernum][nextlayerneuron] = sum;
-        brain->node_array[layernum][nextlayerneuron] = sigmoid(sum);
-        brain->activation_derivative_array[layernum][nextlayerneuron] = sigmoid_derivative(sum);
+        brain->node_array[layernum][nextlayerneuron] = brain->activation(sum);
+        brain->activation_derivative_array[layernum][nextlayerneuron] = brain->activation_derivative(sum);
     }
 
     if (layernum == brain->num_layers - 1) {

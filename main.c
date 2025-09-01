@@ -19,7 +19,7 @@ const int outputneurons = 10;
 const int numtestcases = 200;
 #endif
 
-
+/////////////////////10000000 ten million
 int trainingcycles = 10000000;
 
 #endif
@@ -42,29 +42,33 @@ double testout[numtestcases][outputneurons] = {
 
 #include "imports.h"
 
-double (*default_weight)() = randnum;
+double (*defaultweight_func)() = randnum;
 double (*learningrate_func)(struct BrainHandler*) = learning_rate;
+
+double (*activation_func)(double x) = activation;
+double (*activation_derivative_func)(double x) = activationderivative;
 
 [[noreturn]] int main(void) {
     int hidden_layer_neurons[] = {16,16};
     int numhiddenlayers = sizeof(hidden_layer_neurons)/sizeof(hidden_layer_neurons[0]);
 
-    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, default_weight, trainingcycles, learningrate_func);
+    struct BrainHandler *brain = init(inputneurons, hidden_layer_neurons, outputneurons, numhiddenlayers, defaultweight_func, trainingcycles, learningrate_func, activation_func, activation_derivative_func);
 
+    printf("Training cycle: %d / %d\n", 0, trainingcycles);
     for (int testcase = 0; testcase < trainingcycles; testcase++) {
-        if (testcase % 1000000 == 0) {
-            printf("Training cycle: %d / %d\n", testcase, trainingcycles);
+        if ((testcase+1) % 1000000 == 0) {
+            printf("Training cycle: %d / %d\n", testcase+1, trainingcycles);
         }
         int testnum = testcase % numtestcases ;
         const int inputlength = sizeof(testin[testnum])/sizeof(testin[testnum][0]);
         process(brain, testin[testnum], inputlength, testout[testnum], testcase);
     }
 
-
+    printf("\n\n");
     print_weight(brain);
     printf("\n\n");
     print_bias(brain);
-    //printf("\n\n");
+    printf("\n\n");
     //print_error(brain);
 
 
