@@ -60,12 +60,12 @@ struct BrainHandler{
 
 double activation(double x) {
     return 1 / (1 + exp(-x));
-    return (tanh(x)+1)/2;
+    //return (tanh(x)+1)/2;
 }
 
 double activationderivative(double x) {
     return exp(-x)/pow(1 + exp(-x), 2);
-    return (1/pow(cosh(x),2))/2;
+    //return (1/pow(cosh(x),2))/2;
 }
 
 double randnum() {
@@ -74,6 +74,11 @@ double randnum() {
 
 struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double (*default_weight)(), int trainingcycles, double (*learningrate_func)(struct BrainHandler*), double (*activaition)(double x), double (*activation_derivative)(double x)) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));
+
+    if (brain == NULL) {
+        fprintf(stderr, "Memory allocation failed for brain\n");
+        exit(EXIT_FAILURE);
+    }
 
     brain->epoch = 0;
     brain->total_epochs = trainingcycles;
@@ -91,11 +96,6 @@ struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], co
     layer_neuron_nums[1 + numhiddenlayers] = outputneurons;
 
     int num_layers = 2 + numhiddenlayers;
-
-    if (brain == NULL) {
-        fprintf(stderr, "Memory allocation failed for brain\n");
-        exit(EXIT_FAILURE);
-    }
 
     brain->LAYER_COUNT = (int*)malloc(num_layers * sizeof(int));
     brain->defaultweight_func = default_weight;

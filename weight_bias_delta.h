@@ -20,10 +20,15 @@ void reset_weight_bias_delta(struct BrainHandler *brain) {
 }
 
 double learning_rate(struct BrainHandler *brain) {
+    static int lastepoch = -1;
     /*
     double rate = ((double)1+cos((double)M_PI*(double)brain->epoch/(double)brain->total_epochs))/2;
-    if (brain->epoch % 100000 == 0) {
-        //printf("Learning rate: %lf\n", (double)rate);
+    if (brain->epoch != lastepoch) {
+        lastepoch = brain->epoch;
+
+        if (brain->epoch % 100000 == 0) {
+            printf("Learning rate: %lf\n", (double)rate);
+        }
     }
     return rate;
     */
