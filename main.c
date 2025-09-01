@@ -2,6 +2,8 @@
 // Created by Pepper Scott on 26/8/2025.
 //
 
+//todo: remind Tsudae to make a GitHub account so I can add them as a parent of this silly little eeb
+
 //#define testcases
 
 #ifndef defaults
