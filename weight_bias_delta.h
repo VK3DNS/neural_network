@@ -35,6 +35,12 @@ double learning_rate(struct BrainHandler *brain) {
     return 0.5;
 }
 
+/*
+double learning_rate(struct BrainHandler *brain) {
+    return ((double)1+cos((double)M_PI*(double)brain->epoch/(double)brain->total_epochs))/2;
+}
+*/
+
 void gradient(struct BrainHandler *brain, const double* expected_output) {
 
     double* nablacost = calloc(brain->outputneurons, sizeof(double));
