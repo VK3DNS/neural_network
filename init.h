@@ -68,9 +68,17 @@ double activationderivative(double x) {
     //return (1/pow(cosh(x),2))/2;
 }
 
+
+double randnum() {
+    return ((double)rand() - (double)RAND_MAX/2) / ((double)RAND_MAX/2);
+}
+
+
+/*
 double randnum() {
     return (double)rand() / (double)RAND_MAX;
 }
+*/
 
 struct BrainHandler* init(int inputneurons, const int hidden_layer_neurons[], const int outputneurons, const int numhiddenlayers, double (*default_weight)(), int trainingcycles, double (*learningrate_func)(struct BrainHandler*), double (*activaition)(double x), double (*activation_derivative)(double x)) {
     struct BrainHandler* brain = (struct BrainHandler*)malloc(sizeof(struct BrainHandler));

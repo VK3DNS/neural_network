@@ -1,0 +1,17 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="project">
+    <words>
+      <w>defaultweight</w>
+      <w>inputlength</w>
+      <w>inputneurons</w>
+      <w>learningrate</w>
+      <w>numhiddenlayers</w>
+      <w>numtestcases</w>
+      <w>outputneurons</w>
+      <w>testin</w>
+      <w>testnum</w>
+      <w>trainingcycles</w>
+      <w>tsudae</w>
+    </words>
+  </dictionary>
+</component>
